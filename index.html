@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert Coin to Play</title>
+
+<style>
+body {
+  margin: 0;
+  background: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+#gameWrap {
+  position: relative;
+  width: 500px;
+  max-width: 95vw;
+}
+
+#arcade {
+  width: 100%;
+  display: block;
+}
+
+#quarter {
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  left: 35px;
+  top: 470px;
+  border-radius: 50%;
+  background: silver;
+  border: 3px solid gray;
+  cursor: grab;
+  z-index: 10;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+#quarter::after {
+  content: "25¢";
+}
+
+#slot {
+  position: absolute;
+  left: 320px;
+  top: 585px;
+  width: 90px;
+  height: 45px;
+  z-index: 5;
+}
+
+#message {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  margin: 12px 0;
+}
+</style>
+</head>
+
+<body>
+
+<div>
+  <div id="message">Drag the quarter into the coin slot to begin.</div>
+
+  <div id="gameWrap">
+
+    <img id="arcade"
+      src="https://uths.instructure.com/courses/9352/files/3987151/preview?instfs=true"
+      alt="Arcade Machine">
+
+    <div id="slot"></div>
+
+    <div id="quarter"></div>
+
+  </div>
+</div>
+
+<script>
+const quarter = document.getElementById("quarter");
+const slot = document.getElementById("slot");
+const message = document.getElementById("message");
+const gameWrap = document.getElementById("gameWrap");
+
+const destinationLink =
+"https://uths.instructure.com/courses/9352/pages/choose-your-guide?module_item_id=1108003";
+
+let dragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+quarter.addEventListener("pointerdown", function(e) {
+  dragging = true;
+
+  const rect = quarter.getBoundingClientRect();
+  offsetX = e.clientX - rect.left;
+  offsetY = e.clientY - rect.top;
+});
+
+document.addEventListener("pointermove", function(e) {
+  if (!dragging) return;
+
+  const wrap = gameWrap.getBoundingClientRect();
+
+  quarter.style.left =
+    (e.clientX - wrap.left - offsetX) + "px";
+
+  quarter.style.top =
+    (e.clientY - wrap.top - offsetY) + "px";
+});
+
+document.addEventListener("pointerup", function() {
+  if (!dragging) return;
+
+  dragging = false;
+
+  const q = quarter.getBoundingClientRect();
+  const s = slot.getBoundingClientRect();
+
+  const touching =
+    q.right > s.left &&
+    q.left < s.right &&
+    q.bottom > s.top &&
+    q.top < s.bottom;
+
+  if (touching) {
+    message.innerHTML = "Coin inserted! Loading...";
+
+    quarter.style.left = "340px";
+    quarter.style.top = "590px";
+
+    setTimeout(function() {
+      window.location.href = destinationLink;
+    }, 1000);
+  }
+});
+</script>
+
+</body>
+</html>
