@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Guardian Gate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0b1f3a;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        .page-wrap {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .intro-card {
+            background: #fff8ef;
+            color: #102a43;
+            border-left: 8px solid #bf5700;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            max-width: 760px;
+            margin: 0 auto 24px;
+            font-size: 1.1rem;
+        }
+
+        .gate-scene {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            height: 520px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 20px;
+            border: 4px solid #bf5700;
+            background: linear-gradient(to bottom, #9fd8ff 0%, #f8d49b 42%, #476f3d 100%);
+        }
+
+        .vista {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to bottom, rgba(255,255,255,0.15), rgba(255,255,255,0)),
+                radial-gradient(circle at 50% 25%, #fff7b5 0%, #f9b85f 12%, transparent 28%),
+                linear-gradient(to bottom, #88d2ff 0%, #ffd8a8 45%, #6fa85f 100%);
+            opacity: 0;
+            transition: opacity 1.8s ease;
+        }
+
+        .mountains {
+            position: absolute;
+            bottom: 90px;
+            left: 0;
+            width: 100%;
+            height: 220px;
+            background:
+                linear-gradient(135deg, transparent 50%, #39576c 51%) 0 60px / 260px 160px repeat-x,
+                linear-gradient(45deg, transparent 50%, #57788c 51%) 0 80px / 280px 160px repeat-x;
+            opacity: 0;
+            transition: opacity 1.8s ease;
+        }
+
+        .path {
+            position: absolute;
+            bottom: -40px;
+            left: 38%;
+            width: 24%;
+            height: 250px;
+            background: linear-gradient(to bottom, #e8c27d, #9b6a34);
+            clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%);
+            opacity: 0;
+            transition: opacity 1.8s ease;
+        }
+
+        .gate-left,
+        .gate-right {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    #3b1f14 0,
+                    #3b1f14 38px,
+                    #4b2a1c 38px,
+                    #4b2a1c 44px
+                );
+            transition: transform 1.5s ease-in-out;
+            z-index: 4;
+        }
+
+        .gate-left {
+            left: 0;
+            border-right: 3px solid #1d100b;
+        }
+
+        .gate-right {
+            right: 0;
+            border-left: 3px solid #1d100b;
+        }
+
+        .lock {
+            position: absolute;
+            top: 44%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90px;
+            height: 78px;
+            background: #bf5700;
+            border-radius: 12px;
+            border: 5px solid #ffd08a;
+            z-index: 6;
+            box-shadow: 0 0 20px rgba(255, 208, 138, 0.35);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .lock::before {
+            content: "";
+            position: absolute;
+            top: -58px;
+            left: 16px;
+            width: 50px;
+            height: 58px;
+            border: 8px solid #ffd08a;
+            border-bottom: none;
+            border-radius: 30px 30px 0 0;
+        }
+
+        .scene-text {
+            position: absolute;
+            left: 50%;
+            bottom: 24px;
+            transform: translateX(-50%);
+            width: 84%;
+            background: rgba(11, 31, 58, 0.88);
+            padding: 16px;
+            border-radius: 14px;
+            text-align: center;
+            z-index: 7;
+            font-size: 1.05rem;
+        }
+
+        .choices {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 24px 0;
+        }
+
+        button {
+            border: none;
+            color: #ffffff;
+            padding: 14px 22px;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            min-width: 210px;
+            cursor: pointer;
+        }
+
+        button:focus {
+            outline: 4px solid #ffd08a;
+            outline-offset: 3px;
+        }
+
+        .inspect {
+            background: #3b1f14;
+        }
+
+        .speak {
+            background: #5c1f1f;
+        }
+
+        .search {
+            background: #1f2f46;
+        }
+
+        .reflection {
+            display: none;
+            background: #fff8ef;
+            color: #102a43;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 24px;
+            border: 3px solid #bf5700;
+        }
+
+        .reflection h2 {
+            margin-top: 0;
+            color: #3b1f14;
+        }
+
+        .opened .gate-left {
+            transform: translateX(-100%);
+        }
+
+        .opened .gate-right {
+            transform: translateX(100%);
+        }
+
+        .opened .lock {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.7);
+        }
+
+        .opened .vista,
+        .opened .mountains,
+        .opened .path {
+            opacity: 1;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .gate-left,
+            .gate-right,
+            .lock,
+            .vista,
+            .mountains,
+            .path {
+                transition: none;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .gate-scene {
+                height: 420px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page-wrap">
+        <h1>The Guardian Gate</h1>
+        <p class="subtitle">Pain can feel like a locked gate. The goal is not to force it open. The goal is to listen for what needs care.</p>
+
+        <section class="intro-card" aria-labelledby="intro-heading">
+            <h2 id="intro-heading">Before you choose</h2>
+            <p><strong>The Guardian represents deep suffering.</strong> This is not a personality type. It is a temporary but powerful life condition people may move through.</p>
+            <p>Freezing, shutting down, going numb, or disconnecting can be coping responses. They may be the mind and body trying to protect someone from something that feels too much.</p>
+            <p><strong>Your quest:</strong> Notice the guide. Understand the message. Choose one small next step toward safety, support, or care.</p>
+        </section>
+
+        <section id="gateScene" class="gate-scene" aria-label="A closed gate that can open to reveal a bright landscape">
+            <div class="vista" aria-hidden="true"></div>
+            <div class="mountains" aria-hidden="true"></div>
+            <div class="path" aria-hidden="true"></div>
+            <div class="gate-left" aria-hidden="true"></div>
+            <div class="gate-right" aria-hidden="true"></div>
+            <div class="lock" aria-hidden="true"></div>
+            <div id="sceneText" class="scene-text" aria-live="polite">
+                The gate is closed. The Guardian is not here to punish you. It is protecting something that still hurts.
+            </div>
+        </section>
+
+        <section class="choices" aria-label="Choose how to approach the gate">
+            <button class="inspect" type="button" onclick="inspectLock()">Inspect the Lock</button>
+            <button class="speak" type="button" onclick="speakGuardian()">Speak to the Guardian</button>
+            <button class="search" type="button" onclick="searchPath()">Search for Another Path</button>
+        </section>
+
+        <section id="reflection" class="reflection" aria-labelledby="reflection-heading">
+            <h2 id="reflection-heading">The Gate Opens</h2>
+            <p>The gate does not open because the pain disappears. The gate opens because the pain is met with care.</p>
+            <p><strong>Pause → Name → Next Step</strong></p>
+            <p><strong>Pause:</strong> What is happening in this moment?</p>
+            <p><strong>Name:</strong> What might this feeling be protecting?</p>
+            <p><strong>Next Step:</strong> What is one small move toward safety, support, or care?</p>
+            <p><strong>Value connection:</strong> The suffering someone survives may later help them recognize and encourage another person who feels trapped, numb, overwhelmed, or alone.</p>
+        </section>
+    </main>
+
+    <script>
+        const gateScene = document.getElementById("gateScene");
+        const sceneText = document.getElementById("sceneText");
+        const reflection = document.getElementById("reflection");
+
+        let hasInspected = false;
+        let hasSpoken = false;
+
+        function inspectLock() {
+            hasInspected = true;
+            sceneText.textContent = "You inspect the lock. The words fear, numbness, anger, shame, and silence are carved into it. The lock is not proof of failure. It formed around pain as protection.";
+            checkUnlock();
+        }
+
+        function speakGuardian() {
+            hasSpoken = true;
+            sceneText.textContent = "You speak to the Guardian. It says: Freezing, shutting down, or going numb can be a way to survive what feels too heavy. These responses are not who you are. They are signals that care is needed.";
+            checkUnlock();
+        }
+
+        function searchPath() {
+            sceneText.textContent = "You search for another path. That makes sense. Avoiding pain can protect someone for a while. But this path circles back to the gate. The Guardian is still waiting when you are ready.";
+        }
+
+        function checkUnlock() {
+            if (hasInspected && hasSpoken) {
+                setTimeout(openGate, 900);
+            }
+        }
+
+        function openGate() {
+            gateScene.classList.add("opened");
+            sceneText.textContent = "The gate opens. The pain did not become your identity. It became information. Now you can choose one small step toward care.";
+            reflection.style.display = "block";
+            reflection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    </script>
+</body>
+</html>
