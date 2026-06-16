@@ -1,338 +1,393 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>The Guardian Gate</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Guardian Path Complete</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #0b1f3a;
-            color: #ffffff;
-            line-height: 1.6;
+<style>
+    body {
+        margin: 0;
+        background: #0b1f3a;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #ffffff;
+        line-height: 1.6;
+    }
+
+    .page-wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 24px;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2.2rem;
+        margin: 12px 0 8px;
+    }
+
+    .subtitle {
+        text-align: center;
+        max-width: 780px;
+        margin: 0 auto 24px;
+        font-size: 1.15rem;
+        font-weight: bold;
+    }
+
+    .button-row {
+        text-align: center;
+        margin: 24px 0;
+    }
+
+    button,
+    .return-button {
+        display: inline-block;
+        background: #bf5700;
+        color: #ffffff;
+        border: none;
+        padding: 16px 28px;
+        border-radius: 14px;
+        text-decoration: none;
+        font-size: 1.15rem;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 5px 0 #7a3500;
+    }
+
+    button:hover,
+    .return-button:hover {
+        background: #9f4900;
+    }
+
+    button:focus,
+    .return-button:focus {
+        outline: 4px solid #ffd08a;
+        outline-offset: 4px;
+    }
+
+    .scene {
+        position: relative;
+        width: 100%;
+        max-width: 1000px;
+        min-height: 620px;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 22px;
+        border: 5px solid #bf5700;
+        background:
+            linear-gradient(to bottom, rgba(11,31,58,0.12), rgba(11,31,58,0.25)),
+            url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80");
+        background-size: cover;
+        background-position: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    }
+
+    .curtain-left,
+    .curtain-right {
+        position: absolute;
+        top: 0;
+        width: 52%;
+        height: 100%;
+        background:
+            radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18), transparent 18%),
+            repeating-linear-gradient(
+                90deg,
+                #7d0f0f 0px,
+                #a31818 32px,
+                #5c0c0c 64px
+            );
+        z-index: 8;
+        transition: transform 1.8s ease-in-out;
+        box-shadow: inset 0 0 40px rgba(0,0,0,0.55);
+    }
+
+    .curtain-left {
+        left: 0;
+        border-right: 3px solid #3b0707;
+    }
+
+    .curtain-right {
+        right: 0;
+        border-left: 3px solid #3b0707;
+    }
+
+    .stage-label {
+        position: absolute;
+        top: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(11, 31, 58, 0.94);
+        color: #ffffff;
+        border: 2px solid #ffd08a;
+        border-radius: 14px;
+        padding: 12px 18px;
+        text-align: center;
+        font-size: 1.05rem;
+        font-weight: bold;
+        z-index: 12;
+        max-width: 82%;
+    }
+
+    .guardian-area {
+        position: absolute;
+        left: 8%;
+        bottom: 70px;
+        width: 280px;
+        height: 280px;
+        z-index: 4;
+        opacity: 0;
+        transform: translateY(30px) scale(0.8);
+        transition: opacity 1s ease 1.1s, transform 1s ease 1.1s;
+    }
+
+    .guardian {
+        position: relative;
+        width: 230px;
+        height: 230px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: #ff5b4f;
+        border: 8px solid #3b1f14;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.35);
+    }
+
+    .guardian-face {
+        font-size: 6rem;
+        line-height: 1;
+        z-index: 3;
+    }
+
+    .guardian::before,
+    .guardian::after {
+        content: "";
+        position: absolute;
+        top: -34px;
+        width: 42px;
+        height: 64px;
+        background: #ff5b4f;
+        border: 6px solid #3b1f14;
+        border-radius: 50% 50% 10% 10%;
+        z-index: 2;
+    }
+
+    .guardian::before {
+        left: 44px;
+        transform: rotate(-16deg);
+    }
+
+    .guardian::after {
+        right: 44px;
+        transform: rotate(16deg);
+    }
+
+    .speech {
+        position: absolute;
+        right: 6%;
+        top: 135px;
+        width: 430px;
+        max-width: 45%;
+        background: #fff8ef;
+        color: #102a43;
+        border: 5px solid #3b1f14;
+        border-radius: 28px;
+        padding: 24px;
+        font-size: 1.2rem;
+        z-index: 5;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 1s ease 1.8s, transform 1s ease 1.8s;
+        box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+    }
+
+    .speech h2 {
+        margin-top: 0;
+        color: #0b1f3a;
+        font-size: 1.35rem;
+    }
+
+    .speech p {
+        margin-bottom: 0;
+    }
+
+    .speech::after {
+        content: "";
+        position: absolute;
+        left: -28px;
+        bottom: 54px;
+        width: 38px;
+        height: 38px;
+        background: #fff8ef;
+        border-left: 5px solid #3b1f14;
+        border-bottom: 5px solid #3b1f14;
+        transform: rotate(45deg);
+    }
+
+    .complete-panel {
+        display: none;
+        background: #fff8ef;
+        color: #102a43;
+        border-radius: 20px;
+        padding: 24px;
+        margin: 28px auto 0;
+        max-width: 900px;
+        border: 4px solid #bf5700;
+        text-align: center;
+    }
+
+    .complete-panel h2 {
+        margin-top: 0;
+        color: #3b1f14;
+        font-size: 2rem;
+    }
+
+    .complete-panel p {
+        font-size: 1.1rem;
+    }
+
+    .opened .curtain-left {
+        transform: translateX(-105%);
+    }
+
+    .opened .curtain-right {
+        transform: translateX(105%);
+    }
+
+    .opened .guardian-area {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    .opened .speech {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .confetti {
+        position: absolute;
+        top: -20px;
+        width: 12px;
+        height: 18px;
+        opacity: 0;
+        z-index: 13;
+        animation: none;
+    }
+
+    .opened .confetti {
+        opacity: 1;
+        animation: fall 3.2s linear forwards;
+    }
+
+    @keyframes fall {
+        0% {
+            transform: translateY(-30px) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(680px) rotate(720deg);
+            opacity: 0;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .curtain-left,
+        .curtain-right,
+        .guardian-area,
+        .speech {
+            transition: none;
         }
 
-        .page-wrap {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 24px;
+        .opened .confetti {
+            animation: none;
+            display: none;
+        }
+    }
+
+    @media (max-width: 850px) {
+        .scene {
+            min-height: 760px;
         }
 
-        .intro-card {
-            background: #fff8ef;
-            color: #102a43;
-            border-left: 8px solid #bf5700;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 24px;
+        .stage-label {
+            max-width: 84%;
+            font-size: 1rem;
+        }
+
+        .guardian-area {
+            left: 50%;
+            bottom: 320px;
+            transform: translateX(-50%) translateY(30px) scale(0.8);
+            width: 230px;
+            height: 230px;
+        }
+
+        .guardian {
+            width: 190px;
+            height: 190px;
+        }
+
+        .guardian-face {
+            font-size: 5rem;
+        }
+
+        .speech {
+            left: 50%;
+            right: auto;
+            top: auto;
+            bottom: 70px;
+            transform: translateX(-50%) translateY(20px);
+            width: 78%;
+            max-width: 78%;
+            font-size: 1.05rem;
+        }
+
+        .speech::after {
+            left: 50%;
+            top: -26px;
+            bottom: auto;
+            transform: translateX(-50%) rotate(135deg);
+        }
+
+        .opened .guardian-area {
+            transform: translateX(-50%) translateY(0) scale(1);
+        }
+
+        .opened .speech {
+            transform: translateX(-50%) translateY(0);
         }
 
         h1 {
-            text-align: center;
-            font-size: 2.2rem;
-            margin-bottom: 8px;
+            font-size: 1.8rem;
         }
-
-        .subtitle {
-            text-align: center;
-            max-width: 760px;
-            margin: 0 auto 24px;
-            font-size: 1.1rem;
-        }
-
-        .gate-scene {
-            position: relative;
-            width: 100%;
-            max-width: 900px;
-            height: 520px;
-            margin: 0 auto;
-            overflow: hidden;
-            border-radius: 20px;
-            border: 4px solid #bf5700;
-            background: linear-gradient(to bottom, #9fd8ff 0%, #f8d49b 42%, #476f3d 100%);
-        }
-
-        .vista {
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(to bottom, rgba(255,255,255,0.15), rgba(255,255,255,0)),
-                radial-gradient(circle at 50% 25%, #fff7b5 0%, #f9b85f 12%, transparent 28%),
-                linear-gradient(to bottom, #88d2ff 0%, #ffd8a8 45%, #6fa85f 100%);
-            opacity: 0;
-            transition: opacity 1.8s ease;
-        }
-
-        .mountains {
-            position: absolute;
-            bottom: 90px;
-            left: 0;
-            width: 100%;
-            height: 220px;
-            background:
-                linear-gradient(135deg, transparent 50%, #39576c 51%) 0 60px / 260px 160px repeat-x,
-                linear-gradient(45deg, transparent 50%, #57788c 51%) 0 80px / 280px 160px repeat-x;
-            opacity: 0;
-            transition: opacity 1.8s ease;
-        }
-
-        .path {
-            position: absolute;
-            bottom: -40px;
-            left: 38%;
-            width: 24%;
-            height: 250px;
-            background: linear-gradient(to bottom, #e8c27d, #9b6a34);
-            clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%);
-            opacity: 0;
-            transition: opacity 1.8s ease;
-        }
-
-        .gate-left,
-        .gate-right {
-            position: absolute;
-            top: 0;
-            width: 50%;
-            height: 100%;
-            background:
-                repeating-linear-gradient(
-                    90deg,
-                    #3b1f14 0,
-                    #3b1f14 38px,
-                    #4b2a1c 38px,
-                    #4b2a1c 44px
-                );
-            transition: transform 1.5s ease-in-out;
-            z-index: 4;
-        }
-
-        .gate-left {
-            left: 0;
-            border-right: 3px solid #1d100b;
-        }
-
-        .gate-right {
-            right: 0;
-            border-left: 3px solid #1d100b;
-        }
-
-        .lock {
-            position: absolute;
-            top: 44%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90px;
-            height: 78px;
-            background: #bf5700;
-            border-radius: 12px;
-            border: 5px solid #ffd08a;
-            z-index: 6;
-            box-shadow: 0 0 20px rgba(255, 208, 138, 0.35);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .lock::before {
-            content: "";
-            position: absolute;
-            top: -58px;
-            left: 16px;
-            width: 50px;
-            height: 58px;
-            border: 8px solid #ffd08a;
-            border-bottom: none;
-            border-radius: 30px 30px 0 0;
-        }
-
-        .scene-text {
-            position: absolute;
-            left: 50%;
-            bottom: 24px;
-            transform: translateX(-50%);
-            width: 84%;
-            background: rgba(11, 31, 58, 0.88);
-            padding: 16px;
-            border-radius: 14px;
-            text-align: center;
-            z-index: 7;
-            font-size: 1.05rem;
-        }
-
-        .choices {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-            margin: 24px 0;
-        }
-
-        button {
-            border: none;
-            color: #ffffff;
-            padding: 14px 22px;
-            border-radius: 10px;
-            font-size: 1.05rem;
-            font-weight: bold;
-            min-width: 210px;
-            cursor: pointer;
-        }
-
-        button:focus {
-            outline: 4px solid #ffd08a;
-            outline-offset: 3px;
-        }
-
-        .inspect {
-            background: #3b1f14;
-        }
-
-        .speak {
-            background: #5c1f1f;
-        }
-
-        .search {
-            background: #1f2f46;
-        }
-
-        .reflection {
-            display: none;
-            background: #fff8ef;
-            color: #102a43;
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 24px;
-            border: 3px solid #bf5700;
-        }
-
-        .reflection h2 {
-            margin-top: 0;
-            color: #3b1f14;
-        }
-
-        .opened .gate-left {
-            transform: translateX(-100%);
-        }
-
-        .opened .gate-right {
-            transform: translateX(100%);
-        }
-
-        .opened .lock {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.7);
-        }
-
-        .opened .vista,
-        .opened .mountains,
-        .opened .path {
-            opacity: 1;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .gate-left,
-            .gate-right,
-            .lock,
-            .vista,
-            .mountains,
-            .path {
-                transition: none;
-            }
-        }
-
-        @media (max-width: 700px) {
-            .gate-scene {
-                height: 420px;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            button {
-                width: 100%;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 
 <body>
-    <main class="page-wrap">
-        <h1>The Guardian Gate</h1>
-        <p class="subtitle">Pain can feel like a locked gate. The goal is not to force it open. The goal is to listen for what needs care.</p>
+<main class="page-wrap">
+    <h1>The Guardian Path</h1>
+    <p class="subtitle">You reached the end of this path. Click the button below to complete the level and reveal what The Guardian helped you learn.</p>
 
-        <section class="intro-card" aria-labelledby="intro-heading">
-            <h2 id="intro-heading">Before you choose</h2>
-            <p><strong>The Guardian represents deep suffering.</strong> This is not a personality type. It is a temporary but powerful life condition people may move through.</p>
-            <p>Freezing, shutting down, going numb, or disconnecting can be coping responses. They may be the mind and body trying to protect someone from something that feels too much.</p>
-            <p><strong>Your quest:</strong> Notice the guide. Understand the message. Choose one small next step toward safety, support, or care.</p>
-        </section>
+    <div class="button-row">
+        <button id="completeButton" type="button">Click Here to Complete This Path</button>
+    </div>
 
-        <section id="gateScene" class="gate-scene" aria-label="A closed gate that can open to reveal a bright landscape">
-            <div class="vista" aria-hidden="true"></div>
-            <div class="mountains" aria-hidden="true"></div>
-            <div class="path" aria-hidden="true"></div>
-            <div class="gate-left" aria-hidden="true"></div>
-            <div class="gate-right" aria-hidden="true"></div>
-            <div class="lock" aria-hidden="true"></div>
-            <div id="sceneText" class="scene-text" aria-live="polite">
-                The gate is closed. The Guardian is not here to punish you. It is protecting something that still hurts.
+    <section id="scene" class="scene" aria-label="A celebration scene with curtains opening to reveal The Guardian and a mountain vista">
+        <div class="stage-label" id="stageLabel" aria-live="polite">
+            The curtain is closed. When you are ready, complete the path.
+        </div>
+
+        <div class="curtain-left" aria-hidden="true"></div>
+        <div class="curtain-right" aria-hidden="true"></div>
+
+        <div class="guardian-area" aria-hidden="true">
+            <div class="guardian">
+                <div class="guardian-face">😊</div>
             </div>
-        </section>
+        </div>
 
-        <section class="choices" aria-label="Choose how to approach the gate">
-            <button class="inspect" type="button" onclick="inspectLock()">Inspect the Lock</button>
-            <button class="speak" type="button" onclick="speakGuardian()">Speak to the Guardian</button>
-            <button class="search" type="button" onclick="searchPath()">Search for Another Path</button>
-        </section>
-
-        <section id="reflection" class="reflection" aria-labelledby="reflection-heading">
-            <h2 id="reflection-heading">The Gate Opens</h2>
-            <p>The gate does not open because the pain disappears. The gate opens because the pain is met with care.</p>
-            <p><strong>Pause → Name → Next Step</strong></p>
-            <p><strong>Pause:</strong> What is happening in this moment?</p>
-            <p><strong>Name:</strong> What might this feeling be protecting?</p>
-            <p><strong>Next Step:</strong> What is one small move toward safety, support, or care?</p>
-            <p><strong>Value connection:</strong> The suffering someone survives may later help them recognize and encourage another person who feels trapped, numb, overwhelmed, or alone.</p>
-        </section>
-    </main>
-
-    <script>
-        const gateScene = document.getElementById("gateScene");
-        const sceneText = document.getElementById("sceneText");
-        const reflection = document.getElementById("reflection");
-
-        let hasInspected = false;
-        let hasSpoken = false;
-
-        function inspectLock() {
-            hasInspected = true;
-            sceneText.textContent = "You inspect the lock. The words fear, numbness, anger, shame, and silence are carved into it. The lock is not proof of failure. It formed around pain as protection.";
-            checkUnlock();
-        }
-
-        function speakGuardian() {
-            hasSpoken = true;
-            sceneText.textContent = "You speak to the Guardian. It says: Freezing, shutting down, or going numb can be a way to survive what feels too heavy. These responses are not who you are. They are signals that care is needed.";
-            checkUnlock();
-        }
-
-        function searchPath() {
-            sceneText.textContent = "You search for another path. That makes sense. Avoiding pain can protect someone for a while. But this path circles back to the gate. The Guardian is still waiting when you are ready.";
-        }
-
-        function checkUnlock() {
-            if (hasInspected && hasSpoken) {
-                setTimeout(openGate, 900);
-            }
-        }
-
-        function openGate() {
-            gateScene.classList.add("opened");
-            sceneText.textContent = "The gate opens. The pain did not become your identity. It became information. Now you can choose one small step toward care.";
-            reflection.style.display = "block";
-            reflection.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-    </script>
-</body>
-</html>
+        <div class="speech" id="guardianSpeech">
+            <h2>You completed The Guardian path.</h2>
+            <p>Deep suffering can feel powerful, but it is not your identity. Freezing, shutting down, or going numb can be coping responses. They are
