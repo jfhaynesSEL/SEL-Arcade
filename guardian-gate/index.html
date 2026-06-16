@@ -322,7 +322,7 @@
         font-weight: bold;
     }
 
-    .guardian {
+    . {
         position: relative;
         width: 205px;
         height: 205px;
@@ -336,14 +336,14 @@
         box-shadow: 0 8px 22px rgba(0,0,0,0.35);
     }
 
-    .guardian-face {
+    .-face {
         font-size: 5.3rem;
         line-height: 1;
         z-index: 3;
     }
 
-    .guardian::before,
-    .guardian::after {
+    .::before,
+    .::after {
         content: "";
         position: absolute;
         top: -34px;
@@ -355,12 +355,12 @@
         z-index: 2;
     }
 
-    .guardian::before {
+    .::before {
         left: 44px;
         transform: rotate(-16deg);
     }
 
-    .guardian::after {
+    .::after {
         right: 44px;
         transform: rotate(16deg);
     }
@@ -442,7 +442,7 @@
         transform: translate(-50%, -50%) scale(0.65);
     }
 
-    .opened .guardian-area {
+    .opened .-area {
         opacity: 1;
         transform: translateY(0) scale(1);
     }
@@ -504,12 +504,16 @@
         }
 
         .guardian-area {
-            left: 50%;
-            bottom: 335px;
-            transform: translateX(-50%) translateY(30px) scale(0.8);
-            width: 230px;
-            height: 230px;
-        }
+    position: absolute;
+    left: 8%;
+    bottom: 82px;
+    width: 280px;
+    height: 280px;
+    z-index: 4;
+    opacity: 0;
+    transform: translateY(30px) scale(0.8);
+    transition: opacity 1s ease 1.1s, transform 1s ease 1.1s;
+}
 
         .guardian {
             width: 190px;
